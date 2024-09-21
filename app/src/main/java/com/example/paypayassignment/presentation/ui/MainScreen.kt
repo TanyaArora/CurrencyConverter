@@ -47,14 +47,16 @@ import com.example.paypayassignment.ui.theme.Pink90
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(
+    viewModel: CurrencyViewModel,
+    modifier: Modifier = Modifier,
+    onConvertBtnClick: () -> Unit
+) {
 
-    val viewModel: CurrencyViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    var selectedItem by remember { mutableStateOf("") }
 
-    Scaffold(modifier = modifier.fillMaxSize(), topBar = {
+    Scaffold(modifier = modifier, topBar = {
         CenterAlignedTopAppBar(
             title = {
                 Text(
@@ -120,7 +122,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
                     DropdownMenuItem(
                         text = { Text(item.name) },
                         onClick = {
-                            selectedItem = item.name
+//                            selectedItem = item.name
                             viewModel.apply {
                                 onCurrencySelected(item)
                                 updateDropdownExpandState(false)
@@ -134,8 +136,9 @@ fun MainScreen(modifier: Modifier = Modifier) {
 
             Button(
                 onClick = {
-                    viewModel.convertCurrency()
+                    onConvertBtnClick()
                 },
+                enabled = uiState.enableButton,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Convert")

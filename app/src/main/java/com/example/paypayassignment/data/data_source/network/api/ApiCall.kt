@@ -1,7 +1,6 @@
-package com.example.paypayassignment.data.repository
+package com.example.paypayassignment.data.data_source.network.api
 
 import java.io.IOException
-import java.net.SocketTimeoutException
 
 suspend fun <T> safeApiCall(apiCall: suspend () -> T): Result<T> {
     return try {

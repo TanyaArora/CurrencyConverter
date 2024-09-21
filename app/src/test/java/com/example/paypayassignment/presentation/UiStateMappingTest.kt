@@ -1,6 +1,7 @@
 package com.example.paypayassignment.presentation
 
-import com.example.paypayassignment.presentation.state.CurrencyItemUiState
+import com.example.paypayassignment.domain.mapper.getConvertedAmount
+import com.example.paypayassignment.domain.model.Currency
 import org.junit.Test
 
 //Testing the currency conversion functionality
@@ -11,7 +12,7 @@ class UiStateMappingTest {
         val actualResult = getConvertedAmount(
             usdConversionRate = 3.673,
             baseAmount = null,
-            baseCurrency = CurrencyItemUiState("USD", "", 1.0, 1.0)
+            baseCurrency = Currency("USD", "", 1.0, 1.0)
         )
         val expectedResult = null
         assert(actualResult == expectedResult)
@@ -22,7 +23,7 @@ class UiStateMappingTest {
         val actualResult = getConvertedAmount(
             usdConversionRate = 3.673,
             baseAmount = 0.0,
-            baseCurrency = CurrencyItemUiState("USD", "", 1.0, 1.0)
+            baseCurrency = Currency("USD", "", 1.0, 1.0)
         )
         val expectedResult = 0.0
         assert(actualResult == expectedResult)
@@ -45,7 +46,7 @@ class UiStateMappingTest {
         val actualResult = getConvertedAmount(
             usdConversionRate = 3.673,
             baseAmount = 60.0,
-            baseCurrency = CurrencyItemUiState("USD", "", 1.0, 1.0)
+            baseCurrency = Currency("USD", "", 1.0, 1.0)
         )
         val expectedResult = 220.38
         assert(actualResult == expectedResult)
@@ -58,7 +59,7 @@ class UiStateMappingTest {
         val actualResult = getConvertedAmount(
             usdConversionRate = 83.774858,
             baseAmount = 60.0,
-            baseCurrency = CurrencyItemUiState("AED", "", 3.673, 3.673)
+            baseCurrency = Currency("AED", "", 3.673, 3.673)
         )
         val expectedResult = 1368.49
         assert(actualResult?.toInt() == expectedResult.toInt())

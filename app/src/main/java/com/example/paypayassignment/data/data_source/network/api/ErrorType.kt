@@ -1,4 +1,4 @@
-package com.example.paypayassignment.data.repository
+package com.example.paypayassignment.data.data_source.network.api
 
 sealed class ErrorType {
 

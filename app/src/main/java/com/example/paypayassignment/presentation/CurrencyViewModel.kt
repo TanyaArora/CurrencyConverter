@@ -3,9 +3,10 @@ package com.example.paypayassignment.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.paypayassignment.domain.GetConversionRatesUseCase
-import com.example.paypayassignment.domain.GetCurrenciesUseCase
-import com.example.paypayassignment.presentation.state.CurrencyItemUiState
+import com.example.paypayassignment.domain.mapper.toCurrency
+import com.example.paypayassignment.domain.usecase.GetConversionRatesUseCase
+import com.example.paypayassignment.domain.usecase.GetCurrenciesUseCase
+import com.example.paypayassignment.domain.model.Currency
 import com.example.paypayassignment.presentation.state.CurrencyUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +45,7 @@ class CurrencyViewModel @Inject constructor(
                 withContext(Dispatchers.Main) {
                     _uiState.update {
                         it.copy(
-                            convertedCurrencies = result.toCurrencyItemUiState(), isLoading = false
+                            convertedCurrencies = result.toCurrency(), isLoading = false
                         )
                     }
                 }
@@ -64,12 +65,13 @@ class CurrencyViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 baseAmount = amount,
-                showConvertedCurrencies = if (amount == null || amount == 0.0) false else it.showConvertedCurrencies
+                showConvertedCurrencies = if (amount == null || amount == 0.0) false else it.showConvertedCurrencies,
+                enableButton = amount != null && amount != 0.0
             )
         }
     }
 
-    fun onCurrencySelected(currency: CurrencyItemUiState) {
+    fun onCurrencySelected(currency: Currency) {
         _uiState.update {
             it.copy(baseCurrency = currency)
         }
@@ -88,12 +90,12 @@ class CurrencyViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val result = async { getConversionRatesUseCase.invoke() }.await()
-                Log.d("Tanya", "convertCurrency: $result")
-                Log.d("Tanya", "baseAmount: ${_uiState.value.baseAmount}")
+//                Log.d("Tanya", "convertCurrency: $result")
+//                Log.d("Tanya", "baseAmount: ${_uiState.value.baseAmount}")
                 val baseAmount = _uiState.value.baseAmount
                 val baseCurrency = _uiState.value.baseCurrency
 
-                val convertedCurrencies = result.toCurrencyItemUiState(
+                val convertedCurrencies = result.toCurrency(
                     baseAmount, baseCurrency
                 )
 

@@ -1,15 +1,14 @@
-package com.example.paypayassignment.presentation
+package com.example.paypayassignment.domain.mapper
 
-import android.util.Log
-import com.example.paypayassignment.data.Currency
-import com.example.paypayassignment.presentation.state.CurrencyItemUiState
+import com.example.paypayassignment.data.data_source.entity.CurrencyEntity
+import com.example.paypayassignment.domain.model.Currency
 
-fun List<Currency>.toCurrencyItemUiState(
+fun List<CurrencyEntity>.toCurrency(
     baseAmount: Double? = null,
-    baseCurrency: CurrencyItemUiState? = null
-): List<CurrencyItemUiState> =
+    baseCurrency: Currency? = null
+): List<Currency> =
     this.map { currency ->
-        CurrencyItemUiState(
+        Currency(
             code = currency.code,
             name = currency.name,
             usdConversionRate = currency.usdConversionRate,
@@ -25,9 +24,8 @@ fun List<Currency>.toCurrencyItemUiState(
 fun getConvertedAmount(
     usdConversionRate: Double?,
     baseAmount: Double?,
-    baseCurrency: CurrencyItemUiState?
+    baseCurrency: Currency?
 ): Double? {
-//    Log.d("Tanya", "baseAmount: $baseAmount, usdConversionRate: $usdConversionRate, baseCurrency: $baseCurrency")
     return if (baseAmount != null && baseCurrency != null) {
         if (baseCurrency.code == "USD")
             usdConversionRate?.times(baseAmount)

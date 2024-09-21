@@ -1,6 +1,6 @@
-package com.example.paypayassignment.presentation.state
+package com.example.paypayassignment.domain.model
 
-data class CurrencyItemUiState(
+data class Currency(
     val code: String,
     val name: String,
     val usdConversionRate: Double?,

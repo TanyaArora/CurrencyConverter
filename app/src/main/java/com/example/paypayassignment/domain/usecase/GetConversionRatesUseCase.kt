@@ -1,4 +1,4 @@
-package com.example.paypayassignment.domain
+package com.example.paypayassignment.domain.usecase
 
 import com.example.paypayassignment.data.repository.CurrencyRepository
 import javax.inject.Inject

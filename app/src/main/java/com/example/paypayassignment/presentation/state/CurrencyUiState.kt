@@ -1,9 +1,11 @@
 package com.example.paypayassignment.presentation.state
 
+import com.example.paypayassignment.domain.model.Currency
+
 data class CurrencyUiState(
     val isLoading: Boolean = false,
     val baseAmount: Double? = null,
-    val baseCurrency: CurrencyItemUiState? = CurrencyItemUiState(
+    val baseCurrency: Currency = Currency(
         "USD",
         "United States Dollar",
         null,
@@ -11,5 +13,6 @@ data class CurrencyUiState(
     ),
     val expanded: Boolean = false,
     val showConvertedCurrencies: Boolean = false,
-    val convertedCurrencies: List<CurrencyItemUiState> = listOf()
+    val enableButton: Boolean = false,
+    val convertedCurrencies: List<Currency> = listOf()
 )

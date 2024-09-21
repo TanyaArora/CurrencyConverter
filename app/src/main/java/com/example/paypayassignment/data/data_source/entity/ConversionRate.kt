@@ -1,4 +1,4 @@
-package com.example.paypayassignment.data.data_source.model
+package com.example.paypayassignment.data.data_source.entity
 
 data class ConversionRate(
     val disclaimer: String,

@@ -11,15 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.example.paypayassignment.presentation.state.CurrencyItemUiState
-import com.example.paypayassignment.ui.theme.Pink40
-import com.example.paypayassignment.ui.theme.Pink80
+import com.example.paypayassignment.domain.model.Currency
 import com.example.paypayassignment.ui.theme.Pink90
-import com.example.paypayassignment.ui.theme.Purple80
 
 @Composable
 fun ConvertedCurrencyList(
-    currencies: List<CurrencyItemUiState>,
+    currencies: List<Currency>,
     modifier: Modifier = Modifier
 ) {
 

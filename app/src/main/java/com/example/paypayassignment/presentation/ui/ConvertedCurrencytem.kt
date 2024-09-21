@@ -11,13 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.paypayassignment.presentation.state.CurrencyItemUiState
-import com.example.paypayassignment.ui.theme.Purple40
-import com.example.paypayassignment.ui.theme.Purple80
+import com.example.paypayassignment.domain.model.Currency
 import java.util.Locale
 
 @Composable
-fun ConvertedCurrencyItem(currency: CurrencyItemUiState, modifier: Modifier = Modifier) {
+fun ConvertedCurrencyItem(currency: Currency, modifier: Modifier = Modifier) {
 
     Row(
         modifier = modifier,

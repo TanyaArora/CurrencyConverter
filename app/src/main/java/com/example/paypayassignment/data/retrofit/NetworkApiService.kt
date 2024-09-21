@@ -1,6 +1,6 @@
 package com.example.paypayassignment.data.retrofit
 
-import com.example.paypayassignment.data.data_source.model.ConversionRate
+import com.example.paypayassignment.data.data_source.entity.ConversionRate
 import retrofit2.http.GET
 
 interface NetworkApiService {
