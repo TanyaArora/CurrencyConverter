@@ -3,6 +3,8 @@ package com.example.paypayassignment.presentation
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.paypayassignment.domain.mapper.UiState
 import com.example.paypayassignment.domain.mapper.toCurrency
 import com.example.paypayassignment.domain.usecase.GetConversionRatesUseCase
 import com.example.paypayassignment.domain.usecase.GetCurrenciesUseCase
@@ -29,31 +31,60 @@ class CurrencyViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CurrencyUiState())
     val uiState: StateFlow<CurrencyUiState> = _uiState.asStateFlow()
 
-    private var fetchJob: Job? = null
+//    private var fetchJob: Job? = null
 
     init {
         getCurrencies()
     }
 
     private fun getCurrencies() {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-        fetchJob?.cancel()
-        fetchJob = viewModelScope.launch {
-            try {
-                val result = async(Dispatchers.IO) { getCurrenciesUseCase.invoke() }.await()
-                Log.d("Tanya", "getCurrencies: $result")
-                withContext(Dispatchers.Main) {
-                    _uiState.update {
-                        it.copy(
-                            convertedCurrencies = result.toCurrency(), isLoading = false
-                        )
+        viewModelScope.launch(Dispatchers.IO) {
+            getCurrenciesUseCase.invoke().collect { useCaseState ->
+                when (useCaseState) {
+                    is UiState.Loading ->
+                        _uiState.update {
+                            it.copy(isLoading = true)
+                        }
+
+                    is UiState.Success ->
+                        _uiState.update {
+                            it.copy(convertedCurrencies = useCaseState.data, isLoading = false)
+                        }
+
+                    is UiState.Error -> {
+                        _uiState.update {
+                            it.copy(errorMessage = useCaseState.errorMessage, isLoading = false)
+                        }
                     }
                 }
-            } catch (e: Exception) {
-                Log.d("Tanya", "getCurrencies: $e")
-                withContext(Dispatchers.Main) {
-                    _uiState.update {
-                        it.copy(isLoading = false)
+            }
+        }
+    }
+
+    fun convertCurrency() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val baseAmount = _uiState.value.baseAmount
+            val baseCurrency = _uiState.value.baseCurrency
+            getConversionRatesUseCase.invoke(baseAmount, baseCurrency).collect { useCaseState ->
+                when (useCaseState) {
+                    is UiState.Loading ->
+                        _uiState.update {
+                            it.copy(isLoading = true)
+                        }
+
+                    is UiState.Success ->
+                        _uiState.update {
+                            it.copy(
+                                convertedCurrencies = useCaseState.data,
+                                isLoading = false,
+                                showConvertedCurrencies = true
+                            )
+                        }
+
+                    is UiState.Error -> {
+                        _uiState.update {
+                            it.copy(errorMessage = useCaseState.errorMessage, isLoading = false)
+                        }
                     }
                 }
             }
@@ -80,38 +111,6 @@ class CurrencyViewModel @Inject constructor(
     fun updateDropdownExpandState(expanded: Boolean? = null) {
         _uiState.update {
             it.copy(expanded = expanded ?: !it.expanded)
-        }
-    }
-
-    fun convertCurrency() {
-        _uiState.update {
-            it.copy(isLoading = true)
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val result = async { getConversionRatesUseCase.invoke() }.await()
-//                Log.d("Tanya", "convertCurrency: $result")
-//                Log.d("Tanya", "baseAmount: ${_uiState.value.baseAmount}")
-                val baseAmount = _uiState.value.baseAmount
-                val baseCurrency = _uiState.value.baseCurrency
-
-                val convertedCurrencies = result.toCurrency(
-                    baseAmount, baseCurrency
-                )
-
-                withContext(Dispatchers.Main) {
-                    _uiState.update {
-                        it.copy(
-                            convertedCurrencies = convertedCurrencies,
-                            isLoading = false,
-                            showConvertedCurrencies = true
-                        )
-                    }
-                    Log.d("Tanya", "converted currencies ${_uiState.value.convertedCurrencies}")
-                }
-            } catch (e: Exception) {
-                Log.d("Tanya", "convertCurrency: $e")
-            }
         }
     }
 }

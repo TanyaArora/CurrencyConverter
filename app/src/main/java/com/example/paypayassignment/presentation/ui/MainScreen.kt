@@ -23,6 +23,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -44,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.paypayassignment.presentation.CurrencyViewModel
 import com.example.paypayassignment.ui.theme.Pink90
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,30 +56,35 @@ fun MainScreen(
     onConvertBtnClick: () -> Unit
 ) {
 
+    val snackBarHostState = remember { SnackbarHostState() }
     val uiState by viewModel.uiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    Scaffold(modifier = modifier, topBar = {
-        CenterAlignedTopAppBar(
-            title = {
-                Text(
-                    "Currency Converter",
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Start,
-                    style = TextStyle(fontSize = 18.sp, color = Color.White)
-                )
-            },
-            colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
-        )
-    }) { innerPadding ->
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        modifier = modifier,
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Currency Converter",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        style = TextStyle(fontSize = 18.sp, color = Color.White)
+                    )
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary)
+            )
+        }) { innerPadding ->
 
         if (uiState.isLoading)
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
+            showLoader()
+
+        uiState.errorMessage?.let {
+            coroutineScope.launch {
+                snackBarHostState.showSnackbar(it)
             }
+        }
 
         Column(
             modifier = Modifier
@@ -99,7 +107,7 @@ fun MainScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = uiState.baseCurrency?.name ?: "United States Dollar",
+                value = uiState.baseCurrency.name ?: "United States Dollar",
                 onValueChange = {},
                 label = { Text("Select Option") },
                 modifier = Modifier.fillMaxWidth(),
@@ -151,4 +159,14 @@ fun MainScreen(
         }
     }
 
+}
+
+@Composable
+private fun showLoader() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
 }

@@ -20,6 +20,20 @@ fun List<CurrencyEntity>.toCurrency(
         )
     }
 
+fun CurrencyEntity.toCurrency(
+    baseAmount: Double? = null,
+    baseCurrency: Currency? = null
+) = Currency(
+    code = code,
+    name = name,
+    usdConversionRate = usdConversionRate,
+    convertedAmount = getConvertedAmount(
+        usdConversionRate,
+        baseAmount,
+        baseCurrency
+    )
+)
+
 //usdConversionRate is the conversion rate of USD to destination currency
 fun getConvertedAmount(
     usdConversionRate: Double?,

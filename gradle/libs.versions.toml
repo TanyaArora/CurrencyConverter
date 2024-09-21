@@ -19,6 +19,8 @@ okhttp = "4.12.0"
 room = "2.6.1"
 hilt-compose = "1.2.0"
 datastore = "1.1.1"
+mockk = "1.13.12"
+turbine = "0.12.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,9 +50,12 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 #moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-room-coroutines = {group = "androidx.room", name = "room-ktx", version.ref = "room"}
+room-coroutines = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
-datastore = {group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+mockk = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin" }
+turbine = {group = "app.cash.turbine", name ="turbine", version.ref = "turbine"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

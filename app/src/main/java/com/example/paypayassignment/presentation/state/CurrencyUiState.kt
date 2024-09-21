@@ -4,6 +4,7 @@ import com.example.paypayassignment.domain.model.Currency
 
 data class CurrencyUiState(
     val isLoading: Boolean = false,
+    val errorMessage: String? = null,
     val baseAmount: Double? = null,
     val baseCurrency: Currency = Currency(
         "USD",

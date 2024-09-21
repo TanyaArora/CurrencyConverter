@@ -94,6 +94,11 @@ dependencies {
     //datastore
     implementation(libs.datastore)
 
+    //Testing
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
+
 //    constraints {
 //        implementation("com.squareup:javapoet:1.13.0") { // Use the latest version
 //            because("force")
