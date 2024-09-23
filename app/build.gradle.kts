@@ -81,7 +81,6 @@ dependencies {
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
-//    implementation(libs.moshi)
 
     //Room
     implementation(libs.room)
@@ -95,14 +94,13 @@ dependencies {
     implementation(libs.datastore)
 
     //Testing
+
+    //For creating mocks
     testImplementation(libs.mockk)
+    //For testing suspend functions in a coroutine
     testImplementation(libs.kotlin.coroutines.test)
+    //For testing flows
     testImplementation(libs.turbine)
-
-//    constraints {
-//        implementation("com.squareup:javapoet:1.13.0") { // Use the latest version
-//            because("force")
-//        }
-//    }
-
+    testImplementation(libs.room.testing)
+    testImplementation(libs.androidx.test.core)
 }

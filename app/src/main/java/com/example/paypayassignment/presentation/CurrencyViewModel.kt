@@ -1,25 +1,19 @@
 package com.example.paypayassignment.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.paypayassignment.domain.mapper.UiState
-import com.example.paypayassignment.domain.mapper.toCurrency
 import com.example.paypayassignment.domain.usecase.GetConversionRatesUseCase
 import com.example.paypayassignment.domain.usecase.GetCurrenciesUseCase
 import com.example.paypayassignment.domain.model.Currency
 import com.example.paypayassignment.presentation.state.CurrencyUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,13 +25,11 @@ class CurrencyViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(CurrencyUiState())
     val uiState: StateFlow<CurrencyUiState> = _uiState.asStateFlow()
 
-//    private var fetchJob: Job? = null
-
     init {
         getCurrencies()
     }
 
-    private fun getCurrencies() {
+    fun getCurrencies() {
         viewModelScope.launch(Dispatchers.IO) {
             getCurrenciesUseCase.invoke().collect { useCaseState ->
                 when (useCaseState) {

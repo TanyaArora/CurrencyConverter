@@ -15,13 +15,24 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): ApiResponse<T> {
                         401 -> ApiError.HttpError.Unauthorized
                         404 -> ApiError.HttpError.NotFound
                         503 -> ApiError.HttpError.ServiceUnavailable
-                        else -> ApiError.HttpError.GenericHttpError(
-                            throwable.code(),
-                            throwable.message ?: "Unknown Error"
-                        )
+                        else -> {
+                            var errorMessage = throwable.response()?.errorBody()?.string()
+                            errorMessage = if (errorMessage.isNullOrEmpty())
+                                "Http Error"
+                            else errorMessage
+                            ApiError.HttpError.GenericHttpError(
+                                throwable.code(), errorMessage
+                            )
+                        }
                     }
                 }
-                else -> ApiError.Unknown(throwable.message ?: "Unknown Error")
+
+                else -> {
+                    val errorMessage: String =
+                        throwable.message?.let { if (it.isEmpty()) "Unknown Error" else throwable.message }
+                            ?: "Unknown Error"
+                    ApiError.Unknown(errorMessage)
+                }
             }
         )
     }

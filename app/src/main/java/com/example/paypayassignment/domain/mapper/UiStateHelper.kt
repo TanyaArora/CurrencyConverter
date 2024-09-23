@@ -2,11 +2,9 @@ package com.example.paypayassignment.domain.mapper
 
 import com.example.paypayassignment.data.data_source.network.api.ApiError
 import com.example.paypayassignment.data.data_source.network.api.ApiResponse
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 /*
 * T is the type of data Api returned
@@ -23,7 +21,6 @@ fun <T, R : Any> Flow<ApiResponse<T>>.mapToUiState(transform: (T) -> R): Flow<Ui
                 is ApiError.HttpError.NotFound -> UiState.Error("Api Not found")
                 is ApiError.HttpError.GenericHttpError -> UiState.Error(it.error.errorMessage)
                 is ApiError.Unknown -> UiState.Error(it.error.errorMessage)
-                else -> UiState.Error("Unknown Error")
             }
         }
 
@@ -32,30 +29,4 @@ fun <T, R : Any> Flow<ApiResponse<T>>.mapToUiState(transform: (T) -> R): Flow<Ui
     }
 }.catch { throwable ->
     emit(UiState.Error(throwable.message ?: "Unknown Error"))
-}
-
-fun <T> Flow<UiState<T>>.handleResponse(
-    scope: CoroutineScope,
-    onSuccess: (T) -> Unit,
-    onLoading: () -> Unit,
-    onError: (String) -> Unit
-) {
-    scope.launch {
-        collect {
-            when (it) {
-                is UiState.Error -> {
-
-                }
-
-                is UiState.Loading -> {
-
-                }
-
-                is UiState.Success -> {
-                    onSuccess(it.data)
-                }
-            }
-        }
-    }
-
 }

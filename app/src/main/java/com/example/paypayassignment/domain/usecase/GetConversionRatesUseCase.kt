@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetConversionRatesUseCase @Inject constructor(private val repository: CurrencyRepository) {
 
     suspend operator fun invoke(baseAmount: Double?, baseCurrency: Currency) =
-        repository.getCurrencies().mapToUiState { apiResponse ->
+        repository.getConversionRates().mapToUiState { apiResponse ->
             apiResponse.toCurrency(baseAmount, baseCurrency)
         }
 }

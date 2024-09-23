@@ -1,11 +1,10 @@
-package com.example.paypayassignment.domain
+package com.example.paypayassignment.domain.mapper
 
-import com.example.paypayassignment.domain.mapper.getConvertedAmount
 import com.example.paypayassignment.domain.model.Currency
 import org.junit.Test
 
 //Testing the currency conversion functionality
-class UiStateMapper {
+class UiStateMapperTest {
 
     @Test
     fun `getConvertedAmount should return null if baseAmount is null`() {

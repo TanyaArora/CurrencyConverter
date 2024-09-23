@@ -14,7 +14,7 @@ class AppPreferences @Inject constructor(private val dataStore: DataStore<Prefer
         }
     }
 
-    suspend fun getLongValue(key: Preferences.Key<Long>) = dataStore.data.map { preferences ->
+    fun getLongValue(key: Preferences.Key<Long>) = dataStore.data.map { preferences ->
         preferences[key] ?: 0L
     }
 

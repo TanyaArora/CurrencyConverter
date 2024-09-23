@@ -1,5 +1,7 @@
 package com.example.paypayassignment.di
 
+import com.example.paypayassignment.data.data_source.local.ILocalDataSource
+import com.example.paypayassignment.data.data_source.local.LocalDataSource
 import com.example.paypayassignment.data.data_source.network.INetworkDataSource
 import com.example.paypayassignment.data.data_source.network.NetworkDataSource
 import com.example.paypayassignment.data.repository.CurrencyRepository
@@ -19,6 +21,10 @@ abstract class DataSourceModule {
         networkDataSource: NetworkDataSource
     ): INetworkDataSource
 
+    @Binds
+    abstract fun bindLocalDataSource(
+        localDataSource: LocalDataSource
+    ): ILocalDataSource
 }
 
 @Module
