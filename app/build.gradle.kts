@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.paypayassignment"
+    namespace = "com.tanya.currencyconverter"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.paypayassignment"
+        applicationId = "com.tanya.currencyconverter"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
