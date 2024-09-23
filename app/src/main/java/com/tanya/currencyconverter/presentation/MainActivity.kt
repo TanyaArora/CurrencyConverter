@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.tanya.currencyconverter.presentation.ui.MainScreen
-import com.tanya.currencyconverter.ui.theme.PayPayAssignmentTheme
+import com.tanya.currencyconverter.ui.theme.CurrencyConverterTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class MainActivity @Inject constructor() : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel: CurrencyViewModel = hiltViewModel()
-            PayPayAssignmentTheme {
+            CurrencyConverterTheme {
                 MainScreen(viewModel, Modifier.fillMaxSize()) {
                     viewModel.convertCurrency()
                 }
