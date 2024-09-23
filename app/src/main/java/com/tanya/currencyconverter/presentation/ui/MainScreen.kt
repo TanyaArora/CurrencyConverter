@@ -1,6 +1,7 @@
 package com.tanya.currencyconverter.presentation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -106,7 +107,9 @@ fun MainScreen(
                 OutlinedTextField(value = uiState.baseCurrency.name,
                     onValueChange = {},
                     label = { Text("Select Option") },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().clickable {
+                        viewModel.updateDropdownExpandState()
+                    },
                     readOnly = true,
                     trailingIcon = {
                         IconButton(onClick = { viewModel.updateDropdownExpandState() }) {
