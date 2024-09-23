@@ -107,9 +107,7 @@ fun MainScreen(
                 OutlinedTextField(value = uiState.baseCurrency.name,
                     onValueChange = {},
                     label = { Text("Select Option") },
-                    modifier = Modifier.fillMaxWidth().clickable {
-                        viewModel.updateDropdownExpandState()
-                    },
+                    modifier = Modifier.fillMaxWidth(),
                     readOnly = true,
                     trailingIcon = {
                         IconButton(onClick = { viewModel.updateDropdownExpandState() }) {
