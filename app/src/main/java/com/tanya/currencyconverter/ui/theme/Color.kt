@@ -8,7 +8,7 @@ val PrimaryGreen = Color(0xFF28A745)
 
 // Secondary color
 val SecondaryTeal = Color(0xFF20C997)
-val SecondaryGold = Color(0xFFC107)
+val SecondaryGold = Color(0xFFFFC107)
 
 // Tertiary color (Accent)
 val TertiaryRed = Color(0xFFDC3545)
