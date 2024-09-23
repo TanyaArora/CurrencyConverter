@@ -123,11 +123,7 @@ fun MainScreen(
                 ) {
                     uiState.convertedCurrencies.forEach { item ->
                         DropdownMenuItem(text = {
-                            Text(
-                                item.name,
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
+                            Text(item.name)
                         }, onClick = {
                             viewModel.apply {
                                 onCurrencySelected(item)
@@ -137,7 +133,7 @@ fun MainScreen(
                             .fillMaxWidth()
                             .padding(8.dp)
                             .background(
-                                if (item == uiState.baseCurrency) {
+                                if (item.name == uiState.baseCurrency.name) {
                                     MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
                                 } else {
                                     MaterialTheme.colorScheme.surfaceVariant
