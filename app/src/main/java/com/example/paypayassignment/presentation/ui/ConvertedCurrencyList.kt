@@ -19,7 +19,6 @@ fun ConvertedCurrencyList(
     currencies: List<Currency>,
     modifier: Modifier = Modifier
 ) {
-
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(currencies) {
             ConvertedCurrencyItem(
