@@ -105,7 +105,7 @@ fun MainScreen(
                         onConvertBtnClick()
                     }, enabled = uiState.enableButton, modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Convert")
+                    Text(stringResource(R.string.convert))
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
