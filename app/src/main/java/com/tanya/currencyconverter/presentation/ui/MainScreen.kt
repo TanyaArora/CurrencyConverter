@@ -38,13 +38,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.tanya.currencyconverter.R
 import com.tanya.currencyconverter.presentation.CurrencyViewModel
+import com.tanya.currencyconverter.presentation.state.CurrencyUiState
 import com.tanya.currencyconverter.ui.theme.LightBackground
 import kotlinx.coroutines.launch
 
@@ -90,60 +93,10 @@ fun MainScreen(
         ) {
 
             item {
-                OutlinedTextField(
-                    value = uiState.baseAmount?.toString().orEmpty(),
-                    onValueChange = { viewModel.updateBaseAmount(it) },
-                    label = { Text("Enter amount") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
+                AmountEditText(uiState, viewModel)
             }
             item {
-                OutlinedTextField(value = uiState.baseCurrency.name,
-                    onValueChange = {},
-                    label = { Text("Select Option") },
-                    modifier = Modifier.fillMaxWidth(),
-                    readOnly = true,
-                    trailingIcon = {
-                        IconButton(onClick = { viewModel.updateDropdownExpandState() }) {
-                            Icon(
-                                if (uiState.expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                                contentDescription = null
-                            )
-                        }
-                    })
-                DropdownMenu(
-                    expanded = uiState.expanded,
-                    onDismissRequest = { viewModel.updateDropdownExpandState(false) },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    uiState.convertedCurrencies.forEach { item ->
-                        DropdownMenuItem(text = {
-                            Text(item.name)
-                        }, onClick = {
-                            viewModel.apply {
-                                onCurrencySelected(item)
-                                updateDropdownExpandState(false)
-                            }
-                        }, modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                            .background(
-                                if (item.name == uiState.baseCurrency.name) {
-                                    MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
-                                } else {
-                                    MaterialTheme.colorScheme.surfaceVariant
-                                }
-                            )
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
+                CurrencyDropdown(uiState, viewModel)
             }
 
             item {
@@ -172,6 +125,72 @@ fun MainScreen(
         }
     }
 
+}
+
+@Composable
+private fun CurrencyDropdown(
+    uiState: CurrencyUiState,
+    viewModel: CurrencyViewModel
+) {
+    OutlinedTextField(value = uiState.baseCurrency.name,
+        onValueChange = {},
+        label = { Text(stringResource(R.string.select_base_currency)) },
+        modifier = Modifier.fillMaxWidth(),
+        readOnly = true,
+        trailingIcon = {
+            IconButton(onClick = { viewModel.updateDropdownExpandState() }) {
+                Icon(
+                    if (uiState.expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                    contentDescription = null
+                )
+            }
+        })
+    DropdownMenu(
+        expanded = uiState.expanded,
+        onDismissRequest = { viewModel.updateDropdownExpandState(false) },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        uiState.convertedCurrencies.forEach { item ->
+            DropdownMenuItem(text = {
+                Text(item.name)
+            }, onClick = {
+                viewModel.apply {
+                    onCurrencySelected(item)
+                    updateDropdownExpandState(false)
+                }
+            }, modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .background(
+                    if (item.name == uiState.baseCurrency.name) {
+                        MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+                    } else {
+                        MaterialTheme.colorScheme.surfaceVariant
+                    }
+                )
+            )
+        }
+    }
+
+    Spacer(modifier = Modifier.height(16.dp))
+}
+
+@Composable
+private fun AmountEditText(
+    uiState: CurrencyUiState,
+    viewModel: CurrencyViewModel
+) {
+    OutlinedTextField(
+        value = uiState.baseAmount?.toString().orEmpty(),
+        onValueChange = { viewModel.updateBaseAmount(it) },
+        label = { Text(stringResource(R.string.enter_amount)) },
+        keyboardOptions = KeyboardOptions(
+            keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+        ),
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
