@@ -1,6 +1,8 @@
 package com.tanya.currencyconverter.di
 
 import android.content.Context
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import com.tanya.currencyconverter.R
 import com.tanya.currencyconverter.data.retrofit.NetworkApiService
 import com.tanya.currencyconverter.data.retrofit.QueryParameterInterceptor
@@ -13,7 +15,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -44,12 +46,20 @@ class NetworkModule {
     @Singleton
     fun providesBaseUrl(@ApplicationContext context: Context) = context.getString(R.string.base_url)
 
+    @Provides
+    @Singleton
+    fun provideMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
+
     @Singleton
     @Provides
-    fun provideRetrofitInstance(baseUrl: String, okHttpClient: OkHttpClient): Retrofit =
+    fun provideRetrofitInstance(baseUrl: String, okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
         Retrofit.Builder().baseUrl(baseUrl)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create()).build()
+            .addConverterFactory(MoshiConverterFactory.create(moshi)).build()
 
     @Singleton
     @Provides
