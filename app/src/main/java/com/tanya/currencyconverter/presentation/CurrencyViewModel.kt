@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,8 +31,8 @@ class CurrencyViewModel @Inject constructor(
     }
 
     fun getCurrencies() {
-        viewModelScope.launch(Dispatchers.IO) {
-            getCurrenciesUseCase.invoke().collect { useCaseState ->
+        viewModelScope.launch {
+            getCurrenciesUseCase.invoke().flowOn(Dispatchers.IO).collect { useCaseState ->
                 when (useCaseState) {
                     is UiState.Loading ->
                         _uiState.update {
@@ -54,10 +55,10 @@ class CurrencyViewModel @Inject constructor(
     }
 
     fun convertCurrency() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             val baseAmount = _uiState.value.baseAmount
             val baseCurrency = _uiState.value.baseCurrency
-            getConversionRatesUseCase.invoke(baseAmount, baseCurrency).collect { useCaseState ->
+            getConversionRatesUseCase.invoke(baseAmount, baseCurrency).flowOn(Dispatchers.IO).collect { useCaseState ->
                 when (useCaseState) {
                     is UiState.Loading ->
                         _uiState.update {
